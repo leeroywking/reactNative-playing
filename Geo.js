@@ -93,11 +93,11 @@ export default class App extends Component {
         <Text style={styles.paragraph}>{text} </Text>
       </View>
       <View style={styles.containter}>
-        <FlatList style={styles.paragraph}
+        {/* <FlatList style={styles.paragraph}
           data={this.state.oldLocs}
           keyExtractor={(item) => item.time}
           renderItem={({ item }) => <Text>{item.lat}, {item.lng}, {item.time} </Text>}
-        />
+        /> */}
       </View>
       </>
   );
