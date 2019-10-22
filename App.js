@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, FlatList, Text, View, Button, Linking } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import * as Contacts from 'expo-contacts';
+import Geo from './Geo.js'
 
 
 export default function App() {
@@ -13,7 +14,7 @@ export default function App() {
   }
 
   const showContacts = async () => {
-    // console.log('getting the contacts');
+    console.log('getting the contacts');
     const contactList = await Contacts.getContactsAsync();
     setContacts(contactList.data)
     console.log(contactList.data)
@@ -32,12 +33,15 @@ export default function App() {
   }
   return (
     <View style={styles.container}>
-      <Button onPress={showContacts} title="Show Contacts" />
       <FlatList
         data={contacts}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <Button title={item.name} onPress={() => call(item)} />}
       />
+      <Text>Hi</Text>
+      <Geo/>
+      <Button title="this is a button" onPress={showContacts}></Button>
+      <Text>Hello!</Text>
     </View>
   );
 }
