@@ -3,6 +3,7 @@ import { StyleSheet, FlatList, Text, View, Button, Linking } from 'react-native'
 import * as Permissions from 'expo-permissions';
 import * as Contacts from 'expo-contacts';
 import Geo from './Geo.js'
+import Id from './Id.js'
 
 
 export default function App() {
@@ -28,8 +29,8 @@ export default function App() {
     const phoneNumber = person.phoneNumbers[0].digits
     let link = `tel:${phoneNumber}`
     Linking.canOpenURL(link)
-    .then((supported) => Linking.openURL(link))
-    .catch(console.error);
+      .then((supported) => Linking.openURL(link))
+      .catch(console.error);
   }
   return (
     <View style={styles.container}>
@@ -38,8 +39,9 @@ export default function App() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <Button title={item.name} onPress={() => call(item)} />}
       />
-      <Text>Hi</Text>
-      <Geo/>
+      <Text>Hi: </Text>
+      <Id />
+      <Geo />
       <Button title="this is a button" onPress={showContacts}></Button>
       <Text>Hello!</Text>
     </View>
@@ -54,6 +56,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
 
 

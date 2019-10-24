@@ -1,33 +1,9 @@
 import React, { Component } from 'react';
-import { Platform, Text, View, StyleSheet, FlatList, AsyncStorage } from 'react-native';
+import { Platform, Text, View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 
-
-_storeData = async (oldLocations, newLocation) => {
-  try {
-    console.log('trying to store ')
-    // await AsyncStorage.setItem('PAST_LOCATIONS', [...oldLocations, newLocation]);
-  } catch (error) {
-    console.error(error)
-  }
-};
-
-_retrieveData = async () => {
-  console.log('retrieval started')
-  try {
-    const value = await AsyncStorage.getItem('PAST_LOCATIONS');
-    if (value !== null) {
-      // We have data!!
-      console.log('here is the data', value);
-      return value
-    }
-  } catch (error) {
-    console.log('this is an error!!!!!!!!!!!!!!!')
-    console.error(error)
-  }
-};
 
 class Loc {
   constructor(lat, lng, time) {
@@ -52,9 +28,6 @@ export default class App extends Component {
       });
     } else {
       this._getLocationAsync();
-      const oldData = _retrieveData();
-      console.log(oldData)
-      this.setState({ ...this.state.oldLocs, oldLocs: oldData })
     }
   }
 
@@ -70,12 +43,6 @@ export default class App extends Component {
     let location = await Location.getCurrentPositionAsync({});
     this.setState({ location });
     let loc = new Loc(location.coords.latitude, location.coords.longitude, location.timestamp);
-    const old = await _retrieveData();
-    await _storeData(old, loc);
-    console.log(loc);
-    console.log(location)
-    console.log(this.state)
-    console.log('done!')
 
   };
 
@@ -93,11 +60,6 @@ export default class App extends Component {
         <Text style={styles.paragraph}>{text} </Text>
       </View>
       <View style={styles.containter}>
-        {/* <FlatList style={styles.paragraph}
-          data={this.state.oldLocs}
-          keyExtractor={(item) => item.time}
-          renderItem={({ item }) => <Text>{item.lat}, {item.lng}, {item.time} </Text>}
-        /> */}
       </View>
       </>
   );
