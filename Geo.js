@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, Text, View, StyleSheet } from 'react-native';
+import { Platform, Text, View, StyleSheet, Button } from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
@@ -8,18 +8,23 @@ import * as Permissions from 'expo-permissions';
 class Loc {
   constructor(lat, lng, time) {
     this.lat = lat,
-      this.lng = lng,
-      this.time = time
+    this.lng = lng,
+    this.time = time
   }
 }
 
 
 export default class App extends Component {
+  constructor(props) {
+    super(props)
+  }
   state = {
     location: null,
     errorMessage: null,
     oldLocs: [{ lat: 5, lng: 5, time: 5 }],
   };
+
+
 
   componentWillMount() {
     if (Platform.OS === 'android' && !Constants.isDevice) {
@@ -31,6 +36,9 @@ export default class App extends Component {
     }
   }
 
+  refreshLocation = async () => {
+    this._getLocationAsync();
+  }
 
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -56,13 +64,14 @@ export default class App extends Component {
 
     return (
       <>
-      <View style={styles.container}>
-        <Text style={styles.paragraph}>{text} </Text>
-      </View>
-      <View style={styles.containter}>
-      </View>
+        <View style={styles.container}>
+          <Text style={styles.paragraph}>{text} </Text>
+        </View>
+        <View style={styles.containter}>
+          <Button title="Refresh location" onPress={this.refreshLocation}></Button>
+        </View>
       </>
-  );
+    );
   }
 }
 

@@ -9,9 +9,15 @@ import Id from './Id.js'
 export default function App() {
   const [permissions, setPermissions] = useState('');
   const [contacts, setContacts] = useState([]);
+  const [location, setLocation] = useState({});
+
   const getPermissions = async () => {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS)
     setPermissions(status)
+  }
+
+  const saveLocation = () => {
+    console.log('ehh')
   }
 
   const showContacts = async () => {
@@ -41,7 +47,8 @@ export default function App() {
       />
       <Text>Hi: </Text>
       <Id />
-      <Geo />
+      <Geo functions={setLocation}/>
+      <Button title="Save location" onPress={saveLocation}></Button>
       <Button title="this is a button" onPress={showContacts}></Button>
       <Text>Hello!</Text>
     </View>
