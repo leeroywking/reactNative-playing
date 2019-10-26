@@ -3,9 +3,8 @@ import { StyleSheet, FlatList, Text, View, Button, Linking } from 'react-native'
 import * as Permissions from 'expo-permissions';
 import * as Contacts from 'expo-contacts';
 import Geo from './Geo.js'
-import Id from './Id.js'
-
-
+// import Map from './webMap.js'
+    
 export default function App() {
   const [permissions, setPermissions] = useState('');
   const [contacts, setContacts] = useState([]);
@@ -16,9 +15,7 @@ export default function App() {
     setPermissions(status)
   }
 
-  const saveLocation = () => {
-    console.log('ehh')
-  }
+
 
   const showContacts = async () => {
     console.log('getting the contacts');
@@ -46,10 +43,9 @@ export default function App() {
         renderItem={({ item }) => <Button title={item.name} onPress={() => call(item)} />}
       />
       <Text>Hi: </Text>
-      <Id />
       <Geo functions={setLocation}/>
-      <Button title="Save location" onPress={saveLocation}></Button>
-      <Button title="this is a button" onPress={showContacts}></Button>
+      {/* <Button title="Save location" onPress={saveLocation}></Button> */}
+      {/* <Button title="this is a button" onPress={showContacts}></Button> */}
       <Text>Hello!</Text>
     </View>
   );

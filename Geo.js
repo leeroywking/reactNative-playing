@@ -3,6 +3,8 @@ import { Platform, Text, View, StyleSheet, Button } from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import {saveLocation, getLocation} from './Save.js'
+import Jump from './Jump.js'
 
 
 class Loc {
@@ -19,9 +21,9 @@ export default class App extends Component {
     super(props)
   }
   state = {
-    location: null,
+    location: {},
     errorMessage: null,
-    oldLocs: [{ lat: 5, lng: 5, time: 5 }],
+    oldLoc: {},
   };
 
 
@@ -49,10 +51,17 @@ export default class App extends Component {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    this.setState({ location });
+    this.setState({...this.state, location });
     let loc = new Loc(location.coords.latitude, location.coords.longitude, location.timestamp);
-
+    let oldLocation = await this._loadSavedLocation();
+    this.setState({...this.state, oldLoc:oldLocation})
   };
+
+  _loadSavedLocation = async () => {
+    let oldLoc = await getLocation();
+    // this.setState({...this.state, location:oldLoc})
+    return oldLoc
+  }
 
   render() {
     let text = 'Waiting..';
@@ -68,7 +77,10 @@ export default class App extends Component {
           <Text style={styles.paragraph}>{text} </Text>
         </View>
         <View style={styles.containter}>
-          <Button title="Refresh location" onPress={this.refreshLocation}></Button>
+          <Button title="Refresh location" onPress={this.refreshLocation}/>
+          <Button title="Save this location" onPress={() => saveLocation(this.state.location)}/>
+          {/* <Button title="Show old location" onPress={() => this._loadSavedLocation()}/> */}
+          { this.state.oldLoc.coords ?   <Jump jumpto={this.state.oldLoc}/> : null}
         </View>
       </>
     );
