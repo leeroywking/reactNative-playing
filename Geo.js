@@ -7,6 +7,19 @@ import { saveLocation, getLocation } from './Save.js'
 import Jump from './Jump.js'
 
 
+let dummyLoc ={
+  "coords": {
+    "accuracy": 16.947999954223633,
+    "altitude": 12.90000057220459,
+    "heading": 0,
+    "latitude": 47.61832,
+    "longitude": -122.351986,
+    "speed": 0,
+  },
+  "mocked": false,
+  "timestamp": 1572060406911,
+}
+
 class Loc {
   constructor(lat, lng, time) {
     this.lat = lat,
@@ -23,12 +36,13 @@ export default class App extends Component {
   state = {
     location: {},
     errorMessage: null,
-    oldLoc: {},
+    oldLoc: {coords:false},
   };
 
 
 
   componentWillMount() {
+
     if (Platform.OS === 'android' && !Constants.isDevice) {
       this.setState({
         errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
@@ -54,7 +68,9 @@ export default class App extends Component {
     let location = await Location.getCurrentPositionAsync({});
     this.setState({ ...this.state, location });
     let oldLocation = await this._loadSavedLocation();
+    if(oldLocation){
     this.setState({ ...this.state, oldLoc: oldLocation })
+    }
   };
 
   _loadSavedLocation = async () => {
@@ -90,10 +106,10 @@ export default class App extends Component {
 
           <Text style={styles.paragraph}/>
 
-          {this.state.oldLoc.coords ?
+           {this.state.oldLoc.coords ?
             <Jump style={styles.button} jumpto={this.state.oldLoc} />
             :
-            <Button style={styles.button} color="red" title="Loading Saved Location" />
+            <Button style={styles.button} color="red" title="Loading Saved Location (have you saved one?)" />
           }
 
         </View>
