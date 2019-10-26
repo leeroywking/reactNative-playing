@@ -79,13 +79,16 @@ export default class App extends Component {
             :
             <Button style={styles.button} color="red" title="Refreshing..." />
           }
-
+          
+          <Text style={styles.paragraph}/>
+          
           {this.state.location.coords ?
             <Button style={styles.button} title="Save this location" onPress={() => saveLocation(this.state.location)} />
             :
             <Button style={styles.button} color="red" title="Finding Current Location" />
           }
 
+          <Text style={styles.paragraph}/>
 
           {this.state.oldLoc.coords ?
             <Jump style={styles.button} jumpto={this.state.oldLoc} />
@@ -106,6 +109,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: Constants.statusBarHeight,
     backgroundColor: '#ecf0f1',
+    margin: 10,
   },
   paragraph: {
     margin: 24,
@@ -113,8 +117,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   button: {
-    // width: 90%,
     flex: 1,
+    margin: 20,
     height: 100,
     color: 'purple',
   }
