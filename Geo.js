@@ -3,15 +3,15 @@ import { Platform, Text, View, StyleSheet, Button } from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import {saveLocation, getLocation} from './Save.js'
+import { saveLocation, getLocation } from './Save.js'
 import Jump from './Jump.js'
 
 
 class Loc {
   constructor(lat, lng, time) {
     this.lat = lat,
-    this.lng = lng,
-    this.time = time
+      this.lng = lng,
+      this.time = time
   }
 }
 
@@ -39,6 +39,7 @@ export default class App extends Component {
   }
 
   refreshLocation = async () => {
+    this.setState({...this.state, location: {}})
     this._getLocationAsync();
   }
 
@@ -51,15 +52,13 @@ export default class App extends Component {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    this.setState({...this.state, location });
-    let loc = new Loc(location.coords.latitude, location.coords.longitude, location.timestamp);
+    this.setState({ ...this.state, location });
     let oldLocation = await this._loadSavedLocation();
-    this.setState({...this.state, oldLoc:oldLocation})
+    this.setState({ ...this.state, oldLoc: oldLocation })
   };
 
   _loadSavedLocation = async () => {
     let oldLoc = await getLocation();
-    // this.setState({...this.state, location:oldLoc})
     return oldLoc
   }
 
@@ -73,14 +72,27 @@ export default class App extends Component {
 
     return (
       <>
-        <View style={styles.container}>
-          <Text style={styles.paragraph}>{text} </Text>
-        </View>
         <View style={styles.containter}>
-          <Button title="Refresh location" onPress={this.refreshLocation}/>
-          <Button title="Save this location" onPress={() => saveLocation(this.state.location)}/>
-          {/* <Button title="Show old location" onPress={() => this._loadSavedLocation()}/> */}
-          { this.state.oldLoc.coords ?   <Jump jumpto={this.state.oldLoc}/> : null}
+
+          {this.state.location.coords ?
+            <Button style={styles.button} title="Refresh location" onPress={this.refreshLocation} />
+            :
+            <Button style={styles.button} color="red" title="Refreshing..." />
+          }
+
+          {this.state.location.coords ?
+            <Button style={styles.button} title="Save this location" onPress={() => saveLocation(this.state.location)} />
+            :
+            <Button style={styles.button} color="red" title="Finding Current Location" />
+          }
+
+
+          {this.state.oldLoc.coords ?
+            <Jump style={styles.button} jumpto={this.state.oldLoc} />
+            :
+            <Button style={styles.button} color="red" title="Loading Saved Location" />
+          }
+
         </View>
       </>
     );
@@ -100,4 +112,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
   },
+  button: {
+    // width: 90%,
+    flex: 1,
+    height: 100,
+    color: 'purple',
+  }
 });
